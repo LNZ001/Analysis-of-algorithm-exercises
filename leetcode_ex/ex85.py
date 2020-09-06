@@ -1,23 +1,44 @@
 from typing import List
 class Solution:
+
     def maximalRectangle(self, matrix: List[List[str]]) -> int:
-        lens_x = len(matrix)
-        lens_y = len(matrix[0])
+        if not matrix: return 0
 
-        dp_matrix = [[0] + i for i in matrix]
-        dp_matrix.insert(0, [0] * (lens_y+1))
-        max_matrix = 0
-        for i in range(1, lens_x + 1):
-            for j in range(1, lens_y + 1):
-                dp_matrix[i][j] = int(dp_matrix[i][j])
-                if dp_matrix[i][j] == 0:
-                    continue
+        m = len(matrix)
+        n = len(matrix[0])
 
-                # dp_matrix[i][j] 为 1
-                dp_matrix[i][j] = min(min(dp_matrix[i-1][j], dp_matrix[i][j-1]), dp_matrix[i-1][j-1]) + 1
+        left = [0] * n # initialize left as the leftmost boundary possible
+        right = [n] * n # initialize right as the rightmost boundary possible
+        height = [0] * n
 
-                max_matrix = max(max_matrix, dp_matrix[i][j])
-        return max_matrix
+        maxarea = 0
+
+        for i in range(m):
+
+            cur_left, cur_right = 0, n
+            # update height
+            for j in range(n):
+                if matrix[i][j] == '1': height[j] += 1
+                else: height[j] = 0
+            # update left
+            for j in range(n):
+                if matrix[i][j] == '1': left[j] = max(left[j], cur_left)
+                else:
+                    left[j] = 0
+                    cur_left = j + 1
+            # update right
+            for j in range(n-1, -1, -1):
+                if matrix[i][j] == '1': right[j] = min(right[j], cur_right)
+                else:
+                    right[j] = n
+                    cur_right = j
+            # update the area
+            for j in range(n):
+                maxarea = max(maxarea, height[j] * (right[j] - left[j]))
+
+        return maxarea
+
+
 
 
 

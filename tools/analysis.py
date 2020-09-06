@@ -31,6 +31,10 @@ class ListNode:
     def __init__(self, x, next=None):
         self.val = x
         self.next = next
+    #
+    # def __lt__(self, other):
+    #     return self.val < other.val
+    #
 
 def analysis_listnode(nodes):
     if isinstance(nodes, str):
@@ -38,12 +42,15 @@ def analysis_listnode(nodes):
         node_list = nodes.split("->")
     else:
         node_list = nodes
-    if len(node_list) ==0: return None
+    if len(node_list) == 0: return None
     res = None
     for i in range(len(node_list)-1, -1, -1):
         res = ListNode(node_list[i], res)
     return res
 
+
+
 if __name__ == '__main__':
     # analysis_tree([1, None, 2, None, None, 3])
     analysis_listnode("-1->5->3->4->0")
+    
